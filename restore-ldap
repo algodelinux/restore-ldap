@@ -1,0 +1,73 @@
+#!/bin/bash
+#
+# nombre              : restore-ldap
+# descripción         : Permite realizar una restauración de la configuración y la B.D. LDAP
+# autor               : Esteban M. Navas Martín
+# fecha creación      : 05042016
+# última modificación : 22022016
+# uso                 : restore-ldap [-c|--config] backup-config-ldap-file [-d|--data] backup-data-ldap-file
+# instalación         : Guardar en  /usr/local/sbin/
+
+#
+# Copyright 2015, Esteban M. Navas Martín <algodelinux@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License at <http://www.gnu.org/licenses/> for
+# more details.
+#
+
+basenameconfig="backup-config-ldap"
+basenamedb="backup-db-ldap"
+
+function uso {
+   echo "Debe indicar si desea restaurar la configuración o los datos:"
+   echo "USO: basename $0 --config $basenameconfig.ldif (para restaurar la configuración)"
+   echo "USO: basename $0 --data $basenamedb.ldif (para restaurar los datos)"
+}
+
+function restorefile {
+  local filename=$1
+
+  if [ -f $filename ]; then
+     systemctl stop slapd.service; slapadd -l $filename; slapindex -vF /etc/ldap/slapd.d; chown -R openldap:openldap /var/lib/ldap; systemctl start slapd.service
+  else 
+     echo "El fichero $filename no existe."
+  fi
+}
+
+# Si no hay parámetros, mostramos ayuda y finalizamos
+if [ -z "$1" ]; then
+   uso
+   exit 1;
+fi
+
+# read the options
+TEMP=`getopt -o hc:d: --long help,config:,data: -n "$0" -- "$@"`
+eval set -- "$TEMP"
+
+# extract options and their arguments into variables.
+while true; do
+   case "$1" in
+       -c|--config)
+            case "$2" in
+                "") fileconfig=" "; shift 2 ;;
+                *) restorefile $2; shift 2 ;;
+            esac ;;
+       -d|--data)
+            case "$2" in
+                "") filedata=" "; shift 2 ;;
+                *) restorefile $2; shift 2 ;;
+            esac ;;
+       --)  shift ; break ;;
+       -h | *) # Display help.
+            uso
+            exit 0 ;;
+   esac
+done
