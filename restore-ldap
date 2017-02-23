@@ -4,7 +4,7 @@
 # descripción         : Permite realizar una restauración de la configuración y la B.D. LDAP
 # autor               : Esteban M. Navas Martín
 # fecha creación      : 05042016
-# última modificación : 22022016
+# última modificación : 23022017
 # uso                 : restore-ldap [-c|--config] backup-config-ldap-file [-d|--data] backup-data-ldap-file
 # instalación         : Guardar en  /usr/local/sbin/
 
@@ -34,9 +34,17 @@ function uso {
 
 function restorefile {
   local filename=$1
-
+  local filetype=$2
+  
+  systemctl stop slapd.service
+  
   if [ -f $filename ]; then
-     systemctl stop slapd.service; slapadd -l $filename; slapindex -vF /etc/ldap/slapd.d; chown -R openldap:openldap /var/lib/ldap; systemctl start slapd.service
+     case "$filetype" in
+         "config") rm -r /etc/ldap/slapd.d/*; slapadd -n 0 -F /etc/ldap/slapd.d -l $filename; chown -R openldap:openldap /etc/ldap/slapd.d ;;
+         "data")  rm -r /var/lib/ldap/*; slapadd -n 1 -F /etc/ldap/slapd.d -l $filename; chown -R openldap:openldap /var/lib/ldap ;;
+         *) echo "Error al indicar el tipo" ;;
+     esac    
+     slapindex -vF /etc/ldap/slapd.d; systemctl start slapd.service
   else 
      echo "El fichero $filename no existe."
   fi
@@ -58,12 +66,12 @@ while true; do
        -c|--config)
             case "$2" in
                 "") fileconfig=" "; shift 2 ;;
-                *) restorefile $2; shift 2 ;;
+                *) restorefile $2 config; shift 2 ;;
             esac ;;
        -d|--data)
             case "$2" in
                 "") filedata=" "; shift 2 ;;
-                *) restorefile $2; shift 2 ;;
+                *) restorefile $2 data; shift 2 ;;
             esac ;;
        --)  shift ; break ;;
        -h | *) # Display help.
