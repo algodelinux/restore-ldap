@@ -20,22 +20,22 @@ Instalación
 
 La forma más sencilla de instalarlo es ejecutar estos comandos en el servidor ldap:
 
-   # wget --no-check-certificate -O /usr/local/sbin/restore-ldap https://raw.githubusercontent.com/algodelinux/restore-ldap/master/restore-ldap  
-   # chmod 755 /usr/local/sbin/restore-ldap  
+   * wget --no-check-certificate -O /usr/local/sbin/restore-ldap https://raw.githubusercontent.com/algodelinux/restore-ldap/master/restore-ldap  
+   * chmod 755 /usr/local/sbin/restore-ldap  
   
 
 Uso                   
 ---
 
-   # restore-ldap [-h|--help]  
-   # restore-ldap [-c|--config] backup-config-ldap-file [-d|--data] backup-data-ldap-file  
+   * restore-ldap [-h|--help]  
+   * restore-ldap [-c|--config] backup-config-ldap-file [-d|--data] backup-data-ldap-file  
 
 Ejemplos:  
-   # restore-ldap -h  
-   # restore-ldap --help  
-   # restore-ldap -c backup-config-ldap-20170222.ldif  
-   # restore-ldap -d backup-data-ldap-20170222.ldif  
-   # restore-ldap -c backup-config-ldap-20170222.ldif -d backup-data-ldap-20170222.ldif  
+   * restore-ldap -h  
+   * restore-ldap --help  
+   * restore-ldap -c backup-config-ldap-20170222.ldif  
+   * restore-ldap -d backup-data-ldap-20170222.ldif  
+   * restore-ldap -c backup-config-ldap-20170222.ldif -d backup-data-ldap-20170222.ldif  
 
 ## Authors
 
