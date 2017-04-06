@@ -35,17 +35,18 @@ function uso {
 function restorefile {
   local filename=$1
   local filetype=$2
-  
-  systemctl stop slapd.service
-  
+
+  /bin/systemctl stop slapd.service
+
   if [ -f $filename ]; then
      case "$filetype" in
          "config") rm -r /etc/ldap/slapd.d/*; slapadd -n 0 -F /etc/ldap/slapd.d -l $filename; chown -R openldap:openldap /etc/ldap/slapd.d ;;
          "data")  rm -r /var/lib/ldap/*; slapadd -n 1 -F /etc/ldap/slapd.d -l $filename; chown -R openldap:openldap /var/lib/ldap ;;
          *) echo "Error al indicar el tipo" ;;
-     esac    
-     slapindex -vF /etc/ldap/slapd.d; systemctl start slapd.service
-  else 
+     esac
+     /usr/sbin/slapindex -vF /etc/ldap/slapd.d; /bin/systemctl start slapd.service && /bin/systemctl restart pdns-recursor.service && /bin/systemctl restart pdns.service && /bin/systemctl restart isc-dhcp-server.service
+
+  else
      echo "El fichero $filename no existe."
   fi
 }
