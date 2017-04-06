@@ -28,8 +28,8 @@ basenamedb="backup-db-ldap"
 
 function uso {
    echo "Debe indicar si desea restaurar la configuración o los datos:"
-   echo "USO: basename $0 --config $basenameconfig.ldif (para restaurar la configuración)"
-   echo "USO: basename $0 --data $basenamedb.ldif (para restaurar los datos)"
+   echo "USO: $(basename $0) --config $basenameconfig.ldif (para restaurar la configuración)"
+   echo "USO: $(basename $0) --data $basenamedb.ldif (para restaurar los datos)"
 }
 
 function restorefile {
