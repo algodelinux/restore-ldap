@@ -4,7 +4,7 @@
 # descripción         : Permite realizar una restauración de la configuración y la B.D. LDAP
 # autor               : Esteban M. Navas Martín
 # fecha creación      : 05042016
-# última modificación : 23022017
+# última modificación : 06042017
 # uso                 : restore-ldap [-c|--config] backup-config-ldap-file [-d|--data] backup-data-ldap-file
 # instalación         : Guardar en  /usr/local/sbin/
 
