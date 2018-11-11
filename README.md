@@ -20,8 +20,7 @@ Instalación
 
 La forma más sencilla de instalarlo es ejecutar estos comandos en el servidor ldap:
 
-   * wget --no-check-certificate -O /usr/local/sbin/restore-ldap https://raw.githubusercontent.com/algodelinux/restore-ldap/master/restore-ldap  
-   * chmod 755 /usr/local/sbin/restore-ldap  
+   * wget --no-check-certificate -O /usr/local/sbin/restore-ldap https://raw.githubusercontent.com/algodelinux/restore-ldap/master/restore-ldap && chmod 755 /usr/local/sbin/restore-ldap  
   
 
 Uso                   
